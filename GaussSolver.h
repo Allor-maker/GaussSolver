@@ -2,6 +2,7 @@
 #include <iostream>
 #include "vector.h"
 #include <vector>
+#include "matrix.h"
 
 
 class GaussSolver
@@ -9,17 +10,17 @@ class GaussSolver
 	int m = 0;//number of vectors
 	int n = 0;//number of elements in vector
 
-	std::vector<Vector> arr;
+	Matrix arr;
 	Vector v;
 
 	std::vector<Vector> ans;
 public:
 	GaussSolver(){}
 
-	std::vector<Vector> solve(const std::vector<Vector>& a, const  Vector& vect)
+	std::vector<Vector> solve(const Matrix& a, const  Vector& vect)
 	{
 		m = a.size();
-		n = a[0].size();
+		n = a.get_n();
 		arr = a;
 		v = vect;
 		triang();
@@ -33,7 +34,7 @@ public:
 			for (int j = i + 1; j < m; j++)
 			{
 				zero(i);
-				double div = arr[j][i] / double(arr[i][i]);
+				double div = arr(j,i) / double(arr(i,i));
 				arr[j] -= arr[i] * div;
 				v[j] -= (v[i] * div);
 			}
@@ -58,10 +59,10 @@ public:
 			Vector a1(m);
 			for (int i = m - 1; i >= 0; i--)
 			{
-				a1[i] = v[i] / arr[i][i];
+				a1[i] = v[i] / arr(i,i);
 				for (int k = i + 1; k < m; k++)
 				{
-					a1[i] -= (arr[i][k] * abs(a1[k])/arr[i][i]);
+					a1[i] -= (arr(i,k) * abs(a1[k])/arr(i,i));
 				}
 			}
 
@@ -72,10 +73,10 @@ public:
 				Vector a2(m);
 				for (int j = m - 1; j >= 0; j--)
 				{
-					a2[j] = (-1) * (arr[j][m + i] / arr[j][j]);
+					a2[j] = (-1) * (arr(j,m+i) / arr(j,j));
 					for (int k = j+1; k < m; k++)
 					{
-						a2[j] -= (arr[j][k]*(a2[k]) /arr[j][j]);
+						a2[j] -= (arr(j,k)*(a2[k]) /arr(j,j));
 					}
 				}
 				ans.push_back(a2);
@@ -89,7 +90,7 @@ public:
 		{
 			if (arr[i].nul_vect() && v[i] == 0)
 			{
-				arr.pop_back();
+				arr.del_vec();
 				m--;
 			}
 
@@ -101,10 +102,10 @@ public:
 		{
 			for (int j = i + 1; j < n; j++)
 			{
-				x[i] -= (arr[i][j]*x[j]);
+				x[i] -= (arr(i,j)*x[j]);
 			}
 			x[i] += v[i];
-			x[i] /= arr[i][i];
+			x[i] /= arr(i,i);
 		}
 	}
 	bool eror_check()//checking for the presence of a null string equal to a non-zero number
