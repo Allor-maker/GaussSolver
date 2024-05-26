@@ -106,14 +106,11 @@ int main()
 	{
 		J_test[i] = rand() % 10;
 	}
-	J_test.print();
+	//J_test.print();
 	GaussSolver J;
 	std::vector<Vector> J_ans;
 	J_ans = J.solve(Mat2, J_test);
-	GaussSolver::print(J_ans);
-	for (int i = 0; i < 5; i++)
-	{
-		//std::cout <<i<< "!" <<J_ans[0][i]<<std::endl;
-	}
+	//GaussSolver::print(J_ans);
+	
 	
 }

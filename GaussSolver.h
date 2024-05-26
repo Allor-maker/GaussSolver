@@ -23,10 +23,7 @@ public:
 		n = a.get_n();
 		arr = a;
 		v = vect;
-		arr.print();
-		std::cout << std::endl;
 		triang();
-		v.print();
 		solution();
 		return ans;
 	}
@@ -38,19 +35,12 @@ public:
 			for (int j = i + 1; j < m; j++)
 			{
 				if (zero(j, i) == 1) break;
+
 				double div = static_cast<double>(arr(i, i))/static_cast<double>(arr(j, i));
-				
-				std::cout << div << std::endl;
-				std::cout << std::endl;
-				//Vector x = arr[i] * static_cast<double>(div);
 				arr[j] *= div;
-				arr.print();
-				std::cout << std::endl;
 				arr[j] -= arr[i];
 				v[j] *= div;
 				v[j] -= (v[i]);
-				arr.print();
-				std::cout << std::endl;
 			}
 		}
 		
@@ -151,7 +141,6 @@ public:
 			{
 				std::swap(arr[i], arr[k]);
 				std::swap(v[i], v[k]);
-				//arr[i] / static_cast<double>(arr[i][i]);
 				return 0;
 			}
 			if (k == m - 1 && arr[k][i] == 0)
