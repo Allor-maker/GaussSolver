@@ -21,7 +21,23 @@ public:
 	}
 	Matrix(std::vector<Vector> v) :arr(v),m(v.size()),n(v[0].size())
 	{	}
-	double operator()(int i, int j)
+	Matrix(const Vector& v)
+	{
+		n = 1;
+		m = v.size();
+		for (int i = 0; i < m; i++)
+		{
+			Vector a(1, 1);
+			arr.push_back(a);
+		}
+	}
+	Matrix(const Matrix& a) :m(a.m)
+	{
+		arr.clear();
+		for (int i = 0; i < a.m; i++)
+			arr.push_back(a.arr[i]);
+	}
+	double& operator()(int i, int j)
 	{
 		return arr[i][j];
 	}
@@ -38,6 +54,10 @@ public:
 	{
 		return n;
 	}
+	std::vector<Vector>& get_arr()
+	{
+		return arr;
+	}
 	void del_vec()
 	{
 		arr.pop_back();
@@ -45,6 +65,36 @@ public:
 	Vector& operator[](int i)
 	{
 		return arr[i];
+	}
+	
+	Matrix operator*( Matrix& mat) 
+	{
+		if (this->n != mat.m) throw 0;
+
+		Matrix c(this->m, mat.n);
+		for (int i = 0; i < c.m; i++)
+		{
+			for (int j = 0; j < c.n; j++)
+			{
+				for (int k = 0; k < mat.m; k++)
+					c.arr[i][j] += arr[i][k] * mat(k,j);
+			}
+		}
+		return c;
+	}
+	Matrix& operator=(const Matrix& a)
+	{
+		if (&a == this)
+		{
+			return *this;
+		}
+		this->m = a.m;
+		arr.clear();
+		for (int i = 0; i < this->m; i++)
+		{
+			arr.push_back(a.arr[i]);
+		}
+		return *this;
 	}
 	Matrix& transp()
 	{
@@ -66,6 +116,7 @@ public:
 		}
 
 		return res;
+
 
 	}
 };
