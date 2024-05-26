@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <vector>
+
+
 class Vector {
 private:
 
@@ -16,7 +18,7 @@ public:
 			data[i] = arr[i];
 		}
 	}
-	Vector(int n) :n(n)
+	Vector(int n,double x = 0) :n(n)
 	{
 		if (n <= 0)
 		{
@@ -26,7 +28,7 @@ public:
 		data = new double[n];
 		for (int i = 0; i < n; i++)
 		{
-			this->data[i] = 0;
+			this->data[i] = x;
 		}
 	}
 	Vector(const Vector& v) :n(v.n)
@@ -37,16 +39,8 @@ public:
 			this->data[i] = v.data[i];
 		}
 	}
-
-	Vector(double* arr, int n) :n(n)
-	{
-		data = new double[n];
-		for (int i = 0; i < this->n; i++)
-		{
-			this->data[i] = *(arr + i);
-		}
-	}
-
+	
+	
 	double& operator[](int i)
 	{
 		return (this->data[i]);
@@ -180,6 +174,7 @@ public:
 		for (int i = 0; i < this->n; i++)
 		{
 			this->data[i] -= v.data[i];
+			if (abs(data[i]) < 0.00000000000001) data[i] = 0;
 		}
 		return *this;
 	}

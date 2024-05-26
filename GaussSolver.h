@@ -23,7 +23,10 @@ public:
 		n = a.get_n();
 		arr = a;
 		v = vect;
+		arr.print();
+		std::cout << std::endl;
 		triang();
+		v.print();
 		solution();
 		return ans;
 	}
@@ -31,12 +34,23 @@ public:
 	{
 		for (int i = 0; i < n; i++)
 		{
+			zero(i,i);
 			for (int j = i + 1; j < m; j++)
 			{
-				zero(i);
-				double div = arr(j,i) / double(arr(i,i));
-				arr[j] -= arr[i] * div;
-				v[j] -= (v[i] * div);
+				if (zero(j, i) == 1) break;
+				double div = static_cast<double>(arr(i, i))/static_cast<double>(arr(j, i));
+				
+				std::cout << div << std::endl;
+				std::cout << std::endl;
+				//Vector x = arr[i] * static_cast<double>(div);
+				arr[j] *= div;
+				arr.print();
+				std::cout << std::endl;
+				arr[j] -= arr[i];
+				v[j] *= div;
+				v[j] -= (v[i]);
+				arr.print();
+				std::cout << std::endl;
 			}
 		}
 		
@@ -59,10 +73,10 @@ public:
 			Vector a1(m);
 			for (int i = m - 1; i >= 0; i--)
 			{
-				a1[i] = v[i] / arr(i,i);
+				a1[i] = v[i] / static_cast<double>(arr(i,i));
 				for (int k = i + 1; k < m; k++)
 				{
-					a1[i] -= (arr(i,k) * abs(a1[k])/arr(i,i));
+					a1[i] -= (arr(i,k) * static_cast<double>((a1[k]))/(arr(i,i)));
 				}
 			}
 
@@ -73,10 +87,10 @@ public:
 				Vector a2(m);
 				for (int j = m - 1; j >= 0; j--)
 				{
-					a2[j] = (-1) * (arr(j,m+i) / arr(j,j));
+					a2[j] = (-1) * (static_cast<double>(arr(j,m+i)) / arr(j,j));
 					for (int k = j+1; k < m; k++)
 					{
-						a2[j] -= (arr(j,k)*(a2[k]) /arr(j,j));
+						a2[j] -= (arr(j,k)*(a2[k]) / static_cast<double>(arr(j,j)));
 					}
 				}
 				ans.push_back(a2);
@@ -105,7 +119,7 @@ public:
 				x[i] -= (arr(i,j)*x[j]);
 			}
 			x[i] += v[i];
-			x[i] /= arr(i,i);
+			x[i] /= static_cast<double>(arr(i,i));
 		}
 	}
 	bool eror_check()//checking for the presence of a null string equal to a non-zero number
@@ -128,17 +142,23 @@ public:
 		std::cout << std::endl;
 	}
 
-	void zero(int i)//rearrangement of lines in places for more convenient reduction to a triangular form
+	bool zero(int i,int j)//rearrangement of lines in places for more convenient reduction to a triangular form
 	{
 		
-		for (int k = i; k < n; k++)
+		for (int k = i; k < m; k++)
 		{
-			if (arr[k][i] != 0)
+			if (arr[k][j] != 0)
 			{
 				std::swap(arr[i], arr[k]);
-				break;
+				std::swap(v[i], v[k]);
+				//arr[i] / static_cast<double>(arr[i][i]);
+				return 0;
 			}
+			if (k == m - 1 && arr[k][i] == 0)
+				return 1;
 		}
+		return 1;
+
 
 	}
 };
