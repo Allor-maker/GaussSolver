@@ -56,7 +56,7 @@ public:
 				ans.push_back(x);
 			}
 			else
-				ans.push_back(x);
+				ans.clear();
 		}
 		if (m < n)
 		{
