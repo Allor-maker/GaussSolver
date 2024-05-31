@@ -60,57 +60,100 @@ int main()
 	//test for matrix 100x100
 	srand(time(NULL));
 	Matrix Mat(100, 100);
-	for (int i = 0; i < 100; i++)
-	{
-		for (int j = 0; j < 100; j++)
-		{
-			Mat(i, j) = rand() % 10;
-		}
-	}
-
 	Matrix B_1(100);
 	Vector X(100, 1);
 	Matrix x_1(X);
-	//x_1.print();
-	B_1 = Mat * x_1;
-	//B_1.print();
 	Vector B_2(100);
-	for (int i = 0; i < 100; i++)
-	{
-		B_2[i] = B_1[i][0];
-	}
-	//B_2.print();
 	GaussSolver q;
-	//GaussSolver::print(q.solve(Mat, B_2));
 	std::vector<Vector> ans;
-	//ans = q.solve(Mat, B_2);
-	
-	for (int i = 0; i < 100; i++)
+	for (int k = 0; k < 100; k++)
 	{
-		//if (abs(ans[0][i] - 1.0)>0.0000000001)
-			//std::cout <<i<< "!" <<ans[0][i]<<std::endl;
+		for (int i = 0; i < 100; i++)
+		{
+			for (int j = 0; j < 100; j++)
+			{
+				Mat(i, j) = rand() % 10;
+			}
+		}
+		B_1 = Mat * x_1;
+		//B_1.print();
+		for (int i = 0; i < 100; i++)
+		{
+			B_2[i] = B_1[i][0];
+		}
+		
+		//ans = q.solve(Mat, B_2);
+		for (int i = 0; i < 100; i++)
+		{
+			//if (abs(ans[0][i] - 1.0) > 0.0000000001)
+			//{
+				//std::cout <<i<<". " <<ans[0][i] << std::endl;
+			//}
+			
+		}
 	}
-
-
-	//test fo matrix 4x5
-	Matrix Mat2(4,5);
-	for (int i = 0; i < 4; i++)
+	
+	
+	
+	
+	//test fo matrix 2x5
+	Matrix Mat2(2,5);
+	for (int i = 0; i < 2; i++)
 	{
 		for (int j = 0; j < 5; j++)
 		{
 			Mat2(i, j) = rand() % 10;
 		}
 	}
-	Vector J_test(4);
-	for (int i = 0; i < 4; i++)
+	Vector J_test(2);
+	for (int i = 0; i < 2; i++)
 	{
 		J_test[i] = rand() % 10;
 	}
 	//J_test.print();
+	//Mat2.print();
 	GaussSolver J;
 	std::vector<Vector> J_ans;
-	J_ans = J.solve(Mat2, J_test);
+	//J_ans = J.solve(Mat2, J_test);
 	//GaussSolver::print(J_ans);
 	
+
+	Matrix Mat_2(10, 10);
+	Vector V_2(10);
+	std::vector<Vector> ans2;
+	GaussSolver o;
+	//ans2 = o.solve(Mat_2, V_2);
+	//GaussSolver::print(ans2);
 	
+
+	//test for matrix with 0-vecr
+	Matrix Mat_null_vect(2, 5);
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			if (j == 2)
+				continue;
+			Mat_null_vect(i, j) = rand() % 10;
+		}
+	}
+	Vector null_vect_test(2);
+	for (int i = 0; i < 2; i++)
+	{
+		null_vect_test[i] = rand() % 10;
+	}
+	//null_vect_test.print();
+	//Mat_null_vect.print();
+	GaussSolver null_vect;
+	std::vector<Vector> null_vect__ans;
+	//null_vect__ans = J.solve(Mat_null_vect, null_vect_test);
+	//GaussSolver::print(null_vect__ans);
+
+	//test for null-matrix
+	Matrix null_mat(10, 10);
+	Vector null_vec(10);
+	std::vector<Vector> test_null;
+	GaussSolver n;
+	//test_null = n.solve(null_mat, null_vec);
+	//GaussSolver::print(test_null);
 }
