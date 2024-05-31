@@ -9,11 +9,12 @@ class GaussSolver
 {
 	int m = 0;//number of vectors
 	int n = 0;//number of elements in vector
-
+	int null_str = 0;//number of zero lines
 	Matrix arr;
 	Vector v;
-
+	std::vector<int> indexes;//array of column indices with reference elements
 	std::vector<Vector> ans;
+	std::vector<double> elements;//array of support elements
 public:
 	GaussSolver(){}
 
@@ -27,27 +28,42 @@ public:
 		solution();
 		return ans;
 	}
-	void triang()//reduction to a triangular matrix
+	void triang()//reduction to a diagonal matrix
 	{
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < m; i++)
 		{
-			zero(i,i);
-			for (int j = i + 1; j < m; j++)
+			for (int j = 0; j < n; j++)
 			{
-				if (zero(j, i) == 1) break;
-
-				double div = static_cast<double>(arr(i, i))/static_cast<double>(arr(j, i));
-				arr[j] *= div;
-				arr[j] -= arr[i];
-				v[j] *= div;
-				v[j] -= (v[i]);
+				if (abs(arr[i][j]) > 0.000000001)
+				{
+					indexes.push_back(j);
+					elements.push_back(arr[i][j]);
+					for (int k = 0; k < m; k++)
+					{
+						if (k == i)
+							continue;
+						double div = static_cast<double>(arr(k, j)) / static_cast<double>(arr(i, j));
+						arr[k] -= (arr[i] * div);
+						v[k] -= (v[i] * div);
+					}
+					break;
+				}
+				if (j == n - 1 && abs(arr[i][j]) <0.0000000001 && v[i]==0)
+				{
+					elements.push_back(1);
+					null_str += 1;
+				}	
+				if (j == n - 1 && arr[i][j] < 0.0000000001 && v[i] != 0)
+				{
+					std::swap(arr[i], arr[m]);
+					std::swap(v[i], v[m]);
+				}					
 			}
 		}
-		
 	}
 	void solution()//finding the solution quantity and writing them into the final vector
 	{
-		if (m >= n)
+		if ((m - null_str) >= n)
 		{
 			Vector x(m);
 			if (eror_check() == 0)
@@ -58,60 +74,81 @@ public:
 			else
 				ans.clear();
 		}
-		if (m < n)
+		if ((m - null_str) < n)
 		{
-			Vector a1(m);
-			for (int i = m - 1; i >= 0; i--)
+			first_col();
+			variety_of_solutions();
+		}
+	}
+	void first_col()
+	{
+		Vector a1(m);
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < n; j++)
 			{
-				a1[i] = v[i] / static_cast<double>(arr(i,i));
-				for (int k = i + 1; k < m; k++)
+				for (int k = 0; k < indexes.size(); k++)
 				{
-					a1[i] -= (arr(i,k) * static_cast<double>((a1[k]))/(arr(i,i)));
-				}
-			}
-
-			ans.push_back(a1);
-
-			for (int i = 0; i < n - m; i++)
-			{
-				Vector a2(m);
-				for (int j = m - 1; j >= 0; j--)
-				{
-					a2[j] = (-1) * (static_cast<double>(arr(j,m+i)) / arr(j,j));
-					for (int k = j+1; k < m; k++)
+					if (abs(arr(i, j)) > 0.0000000001 && j == indexes[k])
 					{
-						a2[j] -= (arr(j,k)*(a2[k]) / static_cast<double>(arr(j,j)));
+						a1[i] = v[i] / static_cast<double>(arr(i, j));
+						break;
 					}
 				}
-				ans.push_back(a2);
 			}
 		}
-			 
+		ans.push_back(a1);
 	}
-	void nulvect_del()//removing null lines
+	void variety_of_solutions()
 	{
-		for (int i = m-1; i >=0; i--)
+		int u = indexes.size();
+		for (int i = 0; i < (n - u); i++)
 		{
-			if (arr[i].nul_vect() && v[i] == 0)
+
+			Vector a2(m);
+			for (int k = 0; k < n; k++)
 			{
-				arr.del_vec();
-				m--;
+				bool fl = 0;
+				for (int o = 0; o < indexes.size(); o++)
+				{
+					if (k == indexes[o])
+					{
+						fl = 1;
+						break;
+					}
+				}
+
+				if (fl == 0)
+				{
+					indexes.push_back(k);
+					for (int j = 0; j < m; j++)
+					{
+						a2[j] = (-1) * ((static_cast<double>(arr(j, k)) / elements[j]));
+					}
+					ans.push_back(a2);
+					break;
+				}
+
 			}
 
 		}
 	}
 	void root_search(Vector& x)//root search
 	{
-		for (int i = n - 1; i > -1; i--)
+		for (int i = 0; i < m; i++)
 		{
-			for (int j = i + 1; j < n; j++)
+			for (int j = 0; j < n; j++)
 			{
-				x[i] -= (arr(i,j)*x[j]);
+				if (abs(arr[i][j]) > 0.0000000001)
+				{
+					x[i] = v[i] / static_cast<double>(arr[i][j]);
+					break;
+				}
+					
 			}
-			x[i] += v[i];
-			x[i] /= static_cast<double>(arr(i,i));
 		}
 	}
+	
 	bool eror_check()//checking for the presence of a null string equal to a non-zero number
 	{
 		for (int i = m-1; i >=0; i--)
@@ -132,23 +169,6 @@ public:
 		std::cout << std::endl;
 	}
 
-	bool zero(int i,int j)//rearrangement of lines in places for more convenient reduction to a triangular form
-	{
 		
-		for (int k = i; k < m; k++)
-		{
-			if (arr[k][j] != 0)
-			{
-				std::swap(arr[i], arr[k]);
-				std::swap(v[i], v[k]);
-				return 0;
-			}
-			if (k == m - 1 && arr[k][i] == 0)
-				return 1;
-		}
-		return 1;
-
-
-	}
 };
 

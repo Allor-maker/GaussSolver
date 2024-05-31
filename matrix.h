@@ -44,7 +44,12 @@ public:
 	void print() const
 	{
 		for (int i = 0; i < this->m; i++)
+		{
+			std::cout << i<< ". ";
 			this->arr[i].print();
+		}
+			
+		std::cout << std::endl;
 	}
 	int size() const
 	{
@@ -58,9 +63,10 @@ public:
 	{
 		return arr;
 	}
-	void del_vec()
+	void del_vec(int i)
 	{
-		arr.pop_back();
+		arr.push_back(arr[i]);
+		arr.erase(arr.begin()+i);
 	}
 	Vector& operator[](int i)
 	{

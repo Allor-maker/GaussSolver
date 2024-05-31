@@ -102,7 +102,6 @@ public:
 		}
 		std::cout << std::endl;
 	}
-	
 	Vector operator+(const Vector& v) const {
 
 		if (v.n != this->n)
