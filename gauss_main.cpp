@@ -58,55 +58,89 @@ int main()
 
 
 	//test for matrix 100x100
-	srand(time(NULL));
-	Matrix Mat(100, 100);
-	Matrix B_1(100);
-	Vector X(100, 1);
-	Matrix x_1(X);
-	Vector B_2(100);
-	GaussSolver q;
-	std::vector<Vector> ans;
-	for (int k = 0; k < 100; k++)
-	{
-		for (int i = 0; i < 100; i++)
-		{
-			for (int j = 0; j < 100; j++)
-			{
-				Mat(i, j) = rand() % 10;
-			}
-		}
-		B_1 = Mat * x_1;
-		//B_1.print();
-		for (int i = 0; i < 100; i++)
-		{
-			B_2[i] = B_1[i][0];
-		}
-		
-		//ans = q.solve(Mat, B_2);
-		for (int i = 0; i < 100; i++)
-		{
-			//if (abs(ans[0][i] - 1.0) > 0.0000000001)
-			//{
-				//std::cout <<i<<". " <<ans[0][i] << std::endl;
-			//}
-			
-		}
-	}
-	
+	//srand(time(NULL));
+	//Matrix Mat(100, 100);
+	//Matrix B_1(100);
+	//Vector X(100, 1);
+	//Matrix x_1(X);
+	//Vector B_2(100);
+	//GaussSolver q;
+	//std::vector<Vector> ans;
+	//for (int k = 0; k < 1000; k++)
+	//{
+	//	for (int i = 0; i < 100; i++)
+	//	{
+	//		for (int j = 0; j < 100; j++)
+	//		{
+	//			Mat(i, j) = rand() % 10;
+	//		}
+	//	}
+	//	B_1 = Mat * x_1;
+	//	//B_1.print();
+	//	for (int i = 0; i < 100; i++)
+	//	{
+	//		B_2[i] = B_1[i][0];
+	//	}
+	//	
+	//	ans = q.solve(Mat, B_2);
+	//	for (int i = 0; i < 100; i++)
+	//	{
+	//		if (abs(ans[0][i] - 1.0) > 0.0000000001)
+	//		{
+	//			std::cout <<i<<". " <<ans[0][i] << std::endl;
+	//		}
+	//		
+	//	}
+	//}
+	//test for matrix 10*10
+	//srand(time(NULL));
+	//Matrix Mat(10, 10);
+	//Matrix B_1(10);
+	//Vector X(10, 1);
+	//Matrix x_1(X);
+	//Vector B_2(10);
+	//GaussSolver q;
+	//std::vector<Vector> ans;
+	//for (int k = 0; k < 200; k++)
+	//{
+	//	for (int i = 0; i < 10; i++)
+	//	{
+	//		for (int j = 0; j < 10; j++)
+	//		{
+	//			Mat(i, j) = rand() % 10;
+	//		}
+	//	}
+	//	B_1 = Mat * x_1;
+	//	//B_1.print();
+	//	for (int i = 0; i < 10; i++)
+	//	{
+	//		B_2[i] = B_1[i][0];
+	//	}
+
+	//	ans = q.solve(Mat, B_2);
+	//	for (int i = 0; i < 10; i++)
+	//	{
+	//		if (abs(ans[0][i] - 1.0) > 0.0000000001)
+	//		{
+	//			std::cout << i << ". " << ans[0][i] << std::endl;
+	//		}
+
+	//	}
+	//}
 	
 	
 	
 	//test fo matrix 2x5
-	Matrix Mat2(2,5);
-	for (int i = 0; i < 2; i++)
+	Matrix Mat2(8,10);
+	for (int i = 0; i < 8; i++)
 	{
-		for (int j = 0; j < 5; j++)
+		for (int j = 0; j < 10; j++)
 		{
 			Mat2(i, j) = rand() % 10;
 		}
 	}
-	Vector J_test(2);
-	for (int i = 0; i < 2; i++)
+	Vector J_test(8);
+	for (int i = 0; i < 8; i++)
 	{
 		J_test[i] = rand() % 10;
 	}
