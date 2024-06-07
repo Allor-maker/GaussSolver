@@ -173,7 +173,7 @@ public:
 		for (int i = 0; i < this->n; i++)
 		{
 			this->data[i] -= v.data[i];
-			if (abs(data[i]) < 0.00000000000001) data[i] = 0;
+			if (abs(data[i]) < 0.0000000001) data[i] = 0;
 		}
 		return *this;
 	}
