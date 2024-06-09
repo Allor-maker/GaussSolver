@@ -30,6 +30,7 @@ public:
 		diag();
 		count_zero_str();
 		//arr.print();
+		
 		solution();
 		return ans;
 	}
@@ -48,11 +49,11 @@ public:
 	}
 	int choose_max_elem(int i)//i - number of column; choosing the optimal element
 	{
-		double max = -100000000000;
+		double max = 0;
 		int ind = -1;
 		for (int j = 0; j < m; j++)
 		{
-			if (arr[j][i] > max && abs(arr[j][i])>0.0000000001 && check_elem(j)==false)
+			if (abs(arr[j][i]) > max && abs(arr[j][i])>0.0000000001 && check_elem(j)==false)//!!
 			{
 				max = arr[j][i];
 				ind = j;
@@ -68,7 +69,10 @@ public:
 				continue;
 			double div = static_cast<double>(arr(k, i)) / static_cast<double>(arr(j,i));
 			arr[k] -= (arr[j] * div);
-			v[k] -= (v[j] * div);
+			if (abs(v[k] - v[j] * div) < 0.0000000001)
+				v[k] = 0;
+			else
+				v[k] -= (v[j] * div);
 		}
 	}
 	void count_zero_str()
@@ -110,42 +114,14 @@ public:
 				zeroing_column(j,i);
 			}
 		}
-		/*for (int i = 0; i < m; i++)
-		{
-			for (int j = 0; j < n; j++)
-			{
-				if (abs(arr[i][j]) > 0.0000000001)
-				{
-					indexes.push_back(j);
-					elements.push_back(arr[i][j]);
-					for (int k = 0; k < m; k++)
-					{
-						if (k == i)
-							continue;
-						double div = static_cast<double>(arr(k, j)) / static_cast<double>(arr(i, j));
-						arr[k] -= (arr[i] * div);
-						v[k] -= (v[i] * div);
-					}
-					break;
-				}
-				if (j == n - 1 && abs(arr[i][j]) <0.0000000001 && v[i]==0)
-				{
-					elements.push_back(1);
-					null_str += 1;
-				}	
-				if (j == n - 1 && arr[i][j] < 0.0000000001 && v[i] != 0)
-				{
-					std::swap(arr[i], arr[m]);
-					std::swap(v[i], v[m]);
-				}					
-			}
-		}*/
+		
 	}
 	void solution()//finding the solution quantity and writing them into the final vector
 	{
 		if (eror_check() == true)
 		{
 			ans.clear();
+			std::cout << "!" << std::endl;
 		}
 		else
 		{
@@ -170,21 +146,7 @@ public:
 			a1[indexes_col[i]] = v[indexes_str[i]] / static_cast<double>(elements[i]);
 		}
 		ans.push_back(a1);
-		/*for (int i = 0; i < n; i++)
-		{
-			for (int j = 0; j <m; j++)
-			{
-				for (int k = 0; k < indexes.size(); k++)
-				{
-					if (abs(arr(j, i)) > 0.0000000001 && i == indexes[k])
-					{
-						a1[i] = v[i] / static_cast<double>(arr(i, j));
-						break;
-					}
-				}
-			}
-		}
-		ans.push_back(a1);*/
+		
 	}
 	void variety_of_solutions()
 	{
@@ -198,52 +160,23 @@ public:
 			}
 			ans.push_back(a2);
 		}
-		/*int u = indexes.size();
-		for (int i = 0; i < (n - u); i++)
-		{
-
-			Vector a2(n);
-			for (int k = 0; k < n; k++)
-			{
-				bool fl = 0;
-				for (int o = 0; o < indexes.size(); o++)
-				{
-					if (k == indexes[o])
-					{
-						fl = 1;
-						break;
-					}
-				}
-
-				if (fl == 0)
-				{
-					indexes.push_back(k);
-					for (int j = 0; j < n; j++)
-					{
-						a2[j] = (-1) * ((static_cast<double>(arr(j, k)) / elements[j]));
-					}
-					ans.push_back(a2);
-					break;
-				}
-
-			}
-
-		}*/
+		
 	}
 	void root_search(Vector& x)//root search
 	{
 		for (int i = 0; i < indexes_str.size(); i++)
 		{
-			x[indexes_str[i]] = v[indexes_str[i]] / static_cast<double>(elements[i]);
+			x[i] = v[indexes_str[i]] / static_cast<double>(elements[i]);//!!!
 		}
 	}
 	
 	bool eror_check()//checking for the presence of a null string equal to a non-zero number
 	{
-		for (int i = m-1; i >=0; i--)
+		for (int i = m-1; i >= 0; i--)
 		{
-			if (arr[i].nul_vect() && v[i] != 0)
+			if (arr[i].nul_vect() && abs(v[i])>0.0000000001)
 			{
+				
 				return true;
 			}
 		}
